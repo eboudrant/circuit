@@ -13,6 +13,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier.ABSTRACT
+import com.squareup.kotlinpoet.KModifier.INTERNAL
 import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
@@ -118,14 +119,14 @@ internal enum class CodegenMode {
 
       val providerSpec =
         FunSpec.builder("bind${factoryName}")
-          .addModifiers(ABSTRACT)
+          .addModifiers(INTERNAL, ABSTRACT)
           .addAnnotations(providerAnnotations)
           .addParameter(name = factoryName.replaceFirstChar { it.lowercase() }, type = factory)
           .returns(providerReturns)
           .build()
 
       return TypeSpec.classBuilder(factory.peerClass(factoryName + CircuitNames.MODULE))
-        .addModifiers(ABSTRACT)
+        .addModifiers(INTERNAL, ABSTRACT)
         .addAnnotations(moduleAnnotations)
         .addFunction(providerSpec)
         .build()
