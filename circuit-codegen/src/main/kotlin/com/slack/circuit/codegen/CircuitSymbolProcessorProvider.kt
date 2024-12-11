@@ -24,6 +24,7 @@ import com.google.devtools.ksp.symbol.KSDeclaration
 import com.google.devtools.ksp.symbol.KSFunctionDeclaration
 import com.google.devtools.ksp.symbol.KSType
 import com.google.devtools.ksp.symbol.Visibility
+import com.slack.circuit.codegen.CodegenMode.HILT
 import com.slack.circuit.codegen.CodegenMode.KOTLIN_INJECT_ANVIL
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
@@ -149,6 +150,9 @@ private class CircuitSymbolProcessor(
     val builder =
       TypeSpec.classBuilder(className + CircuitNames.FACTORY)
         .apply {
+          if (codegenMode == HILT) {
+            addModifiers(KModifier.INTERNAL)
+          }
           val constructorBuilder =
             FunSpec.constructorBuilder().addParameters(factoryData.constructorParams)
           // Add the `@Inject` annotation to the appropriate place

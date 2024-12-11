@@ -980,7 +980,7 @@ class CircuitSymbolProcessorTest {
         import com.slack.circuit.runtime.screen.Screen
         import javax.inject.Inject
 
-        public class FavoritesPresenterFactory @Inject constructor(
+        internal class FavoritesPresenterFactory @Inject constructor(
           private val factory: FavoritesPresenter.Factory,
         ) : Presenter.Factory {
           override fun create(
@@ -1050,10 +1050,10 @@ class CircuitSymbolProcessorTest {
         @Module
         @InstallIn(SingletonComponent::class)
         @OriginatingElement(topLevelClass = FavoritesPresenter::class)
-        public abstract class FavoritesPresenterFactoryModule {
+        internal abstract class FavoritesPresenterFactoryModule {
           @Binds
           @IntoSet
-          public abstract fun bindFavoritesPresenterFactory(favoritesPresenterFactory: FavoritesPresenterFactory): Presenter.Factory
+          internal abstract fun bindFavoritesPresenterFactory(favoritesPresenterFactory: FavoritesPresenterFactory): Presenter.Factory
         }
         """
           .trimIndent(),
@@ -1097,10 +1097,10 @@ class CircuitSymbolProcessorTest {
 
         @Module
         @InstallIn(SingletonComponent::class)
-        public abstract class HomeFactoryModule {
+        internal abstract class HomeFactoryModule {
           @Binds
           @IntoSet
-          public abstract fun bindHomeFactory(homeFactory: HomeFactory): Ui.Factory
+          internal abstract fun bindHomeFactory(homeFactory: HomeFactory): Ui.Factory
         }
       """
           .trimIndent(),
