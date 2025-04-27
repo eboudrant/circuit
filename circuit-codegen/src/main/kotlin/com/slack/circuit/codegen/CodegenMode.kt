@@ -13,6 +13,7 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier.ABSTRACT
+import com.squareup.kotlinpoet.KModifier.INTERNAL
 import com.squareup.kotlinpoet.LambdaTypeName
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import com.squareup.kotlinpoet.TypeName
@@ -67,7 +68,7 @@ internal enum class CodegenMode {
    * @Module
    * @InstallIn(SingletonComponent::class)
    * @OriginatingElement(topLevelClass = FavoritesPresenter::class)
-   * public abstract class FavoritesPresenterFactoryModule {
+   * internal abstract class FavoritesPresenterFactoryModule {
    *   @Binds
    *   @IntoSet
    *   public abstract
@@ -125,6 +126,7 @@ internal enum class CodegenMode {
           .build()
 
       return TypeSpec.classBuilder(factory.peerClass(factoryName + CircuitNames.MODULE))
+        .addModifiers(INTERNAL)
         .addModifiers(ABSTRACT)
         .addAnnotations(moduleAnnotations)
         .addFunction(providerSpec)
