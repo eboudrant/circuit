@@ -3,6 +3,7 @@
 package com.slack.circuit.tacos
 
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,6 +17,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,7 +29,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.slack.circuit.fragmentreplace.MainActivity
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.presenter.Presenter
@@ -60,6 +62,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.parcelize.Parcelize
+import com.slack.circuit.retained.rememberRetained
 
 @Parcelize
 data object OrderTacosScreen : Screen {
@@ -86,6 +89,10 @@ data object OrderTacosScreen : Screen {
     }
 
     data object ProcessOrder : Event {
+      override val indexModifier: Int = 1
+    }
+
+    data object NewFragment : Event {
       override val indexModifier: Int = 1
     }
   }
@@ -116,9 +123,9 @@ internal class OrderTacosPresenter(
 ) : Presenter<OrderTacosScreen.State> {
   @Composable
   override fun present(): OrderTacosScreen.State {
-    var currentStep by remember { mutableStateOf(initialStep) }
-    var orderDetails by remember { mutableStateOf(initialOrderDetails) }
-    var isNextEnabled by remember { mutableStateOf(false) }
+    var currentStep by rememberRetained { mutableStateOf(initialStep) }
+    var orderDetails by rememberRetained { mutableStateOf(initialOrderDetails) }
+    var isNextEnabled by rememberRetained { mutableStateOf(false) }
 
     // Generate state for the current order step
     val stepState =
@@ -134,6 +141,7 @@ internal class OrderTacosPresenter(
         }
       }
 
+    val activity = LocalActivity.current as com.slack.circuit.fragmentreplace.MainActivity
     return OrderTacosScreen.State(
       headerResId = currentStep.headerResId,
       orderCost = (orderDetails.baseCost + orderDetails.ingredientsCost).toCurrencyString(),
@@ -143,8 +151,12 @@ internal class OrderTacosPresenter(
       isNextVisible = currentStep.index < 2,
       isFooterVisible = currentStep != SummaryOrderStep,
     ) { navEvent ->
-      // process navigation event from child order step
-      processNavigation(currentStep, navEvent) { currentStep = it }
+      if (navEvent is OrderTacosScreen.Event.NewFragment) {
+        activity.newFragment()
+      } else {
+        // process navigation event from child order step
+        processNavigation(currentStep, navEvent) { currentStep = it }
+      }
     }
   }
 
@@ -228,6 +240,14 @@ internal fun OrderTacosUi(state: OrderTacosScreen.State, modifier: Modifier = Mo
     },
   ) { padding ->
     Column(Modifier.padding(padding).fillMaxSize()) {
+      if (state.stepState !is  FillingsOrderStep.State) {
+        Button(
+          onClick = { state.eventSink(OrderTacosScreen.Event.NewFragment) },
+          modifier = Modifier.padding(8.dp),
+        ) {
+          Text(text = "Add new fragment to backstack")
+        }
+      }
       val stepModifier = Modifier.weight(1f)
       when (state.stepState) {
         is FillingsOrderStep.State -> FillingsUi(state.stepState, modifier = stepModifier)

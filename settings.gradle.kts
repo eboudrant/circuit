@@ -219,6 +219,7 @@ include(
   ":samples:counter",
   ":samples:counter:apps",
   ":samples:counter:mosaic",
+  ":samples:fragment-replace",
   ":samples:interop",
   ":samples:kotlin-inject",
   ":samples:star",
