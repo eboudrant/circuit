@@ -16,22 +16,20 @@ import com.slack.circuit.tacos.ui.theme.TacoTheme
 
 class MainFragment : Fragment() {
 
-    private val viewModel: MiniViewModal by viewModels()
-
+    private val dummyViewModel: MiniViewModal by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        if (!viewModel.text.value.isNullOrBlank()) {
-            Toast.makeText(
-                requireContext(),
-                "${viewModel.text.value}",
-                Toast.LENGTH_SHORT
-            )
-                .show()
-        }
+        Toast.makeText(
+            requireContext(),
+            "${dummyViewModel.text.value}",
+            Toast.LENGTH_SHORT
+        )
+            .show()
+
         val circuit = (requireActivity() as MainActivity).circuit
         return ComposeView(requireContext()).apply {
             setContent {
@@ -39,7 +37,7 @@ class MainFragment : Fragment() {
                     CircuitCompositionLocals(circuit) {
                         CircuitContent(OrderTacosScreen)
                         LaunchedEffect(Unit) {
-                            viewModel.updateText("Circuit state wasn't restored, back to fillings screen")
+                            dummyViewModel.updateText("Circuit state wasn't restored, back to first screen screen")
                         }
                     }
                 }
