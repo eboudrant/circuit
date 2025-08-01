@@ -1050,7 +1050,7 @@ class CircuitSymbolProcessorTest {
         @Module
         @InstallIn(SingletonComponent::class)
         @OriginatingElement(topLevelClass = FavoritesPresenter::class)
-        public abstract class FavoritesPresenterFactoryModule {
+        internal abstract class FavoritesPresenterFactoryModule {
           @Binds
           @IntoSet
           public abstract fun bindFavoritesPresenterFactory(favoritesPresenterFactory: FavoritesPresenterFactory): Presenter.Factory
@@ -1097,7 +1097,7 @@ class CircuitSymbolProcessorTest {
 
         @Module
         @InstallIn(SingletonComponent::class)
-        public abstract class HomeFactoryModule {
+        internal abstract class HomeFactoryModule {
           @Binds
           @IntoSet
           public abstract fun bindHomeFactory(homeFactory: HomeFactory): Ui.Factory
