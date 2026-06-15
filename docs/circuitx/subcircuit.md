@@ -224,7 +224,7 @@ Requirements:
 
 ### DI Modes
 
-The code generator supports two DI frameworks:
+The code generator supports three DI frameworks:
 
 === "Anvil (default)"
 
@@ -233,6 +233,10 @@ The code generator supports two DI frameworks:
 === "Metro"
 
     Set `subcircuit.codegen.mode=metro` as a KSP argument. Generates `@ContributesIntoSet(Scope::class)` + `@Inject`.
+
+=== "Hilt"
+
+    Set `subcircuit.codegen.mode=hilt` as a KSP argument. Generates an `@Inject` factory plus a separate `@Module`/`@InstallIn(Scope::class)` module that `@Binds @IntoSet` the factory into the multibinding set. Hilt only supports JVM & Android targets.
 
 ### Wiring
 
