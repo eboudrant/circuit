@@ -62,8 +62,9 @@ public enum class CodegenMode {
   METRO,
   /**
    * Uses Hilt. Generates an `@Inject` constructor on the factory plus a separate `@Module` /
-   * `@InstallIn` module that `@Binds @IntoSet` the factory into the multibinding set. Hilt only
-   * supports JVM & Android targets.
+   * `@InstallIn` module that `@Binds @IntoSet` the factory into the multibinding set. Hilt is an
+   * Android DI framework, so this mode targets Android (and the JVM) only and can't be used for
+   * other Kotlin Multiplatform targets (Native/JS/Wasm).
    */
   HILT,
 }

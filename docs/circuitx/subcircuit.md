@@ -236,7 +236,7 @@ The code generator supports three DI frameworks:
 
 === "Hilt"
 
-    Set `subcircuit.codegen.mode=hilt` as a KSP argument. Generates an `@Inject` factory plus a separate `@Module`/`@InstallIn(Scope::class)` module that `@Binds @IntoSet` the factory into the multibinding set. Hilt only supports JVM & Android targets.
+    Set `subcircuit.codegen.mode=hilt` as a KSP argument. Generates an `@Inject` factory plus a separate `@Module`/`@InstallIn(Scope::class)` module that `@Binds @IntoSet` the factory into the multibinding set. Hilt is an Android DI framework, so this mode targets Android (and the JVM); it can't be used for other Kotlin Multiplatform targets (Native/JS/Wasm).
 
 ### Wiring
 
